@@ -18,8 +18,12 @@ async function main() {
   const forwarder = await forwarderFactory.deploy('ERC2771Forwarder')
     .then((f) => f.deployed())
 
-  const registryFactory = await ethers.getContractFactory('Registry', signer)
-  const registry = await registryFactory.deploy(forwarder.address)
+  const ENSFactory = await ethers.getContractFactory('ENS', signer)
+  const ENS = await ENSFactory.deploy(forwarder.address)
+    .then((f) => f.deployed())
+
+  const CHATFactory = await ethers.getContractFactory('Chat', signer)
+  const CHAT = await CHATFactory.deploy(ENS.address, forwarder.address)
     .then((f) => f.deployed())
 
   writeFileSync(
@@ -27,15 +31,16 @@ async function main() {
     JSON.stringify(
       {
         ERC2771Forwarder: forwarder.address,
-        Registry: registry.address,
+        ENS: ENS.address,
+        CHAT: CHAT.address,
       },
       null,
-      2
+      3
     )
   )
 
   console.log(
-    `ERC2771Forwarder: ${forwarder.address}\nRegistry: ${registry.address}`
+    `ERC2771Forwarder: ${forwarder.address}\nENS: ${ENS.address}\nCHAT: ${CHAT.address}`
   )
 }
 

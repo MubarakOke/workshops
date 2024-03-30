@@ -9,7 +9,7 @@ async function main() {
   const client = new Defender(creds);
 
   const { actionId } = await client.action.create({
-    name: "Relay MetaTx",
+    name: "Relay CHAT",
     encodedZippedCode: await client.action.getEncodedZippedCodeFromFolder('./build/action'),
     relayerId: relayerId,
     trigger: {
